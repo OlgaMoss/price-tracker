@@ -1,7 +1,7 @@
 # Read Me First
 The following was discovered as part of building this project:
 
-* The original package name 'io.github.solar.analytics-service' is invalid and this project uses 'io.github.solar.analytics_service' instead.
+* The original package name 'io.github.solar.analytics' is invalid and this project uses 'io.github.solar.analytics' instead.
 
 # Getting Started
 
