@@ -1,3 +1,48 @@
+server:
+  port: 8081
+
+kind: Application
+
 spring:
   application:
     name: analytics-service
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/price_tracker_db
+    username: tracker_user
+    password: tracker_password
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: analytics-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+      properties:
+        spring:
+          json:
+            trusted:
+              packages: "*"
+          kafka:
+            support:
+              serializer:
+                ErrorHandlingDeserializer:
+                  key:
+                    delegate: org.apache.kafka.common.serialization.StringDeserializer
+                  value:
+                    delegate: org.springframework.kafka.support.serializer.JsonDeserializer
+
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
