@@ -6,10 +6,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 class AnalyticsServiceApplicationTests {
 
-	/**
-	 * Standard test, empty so far
-	 */
-	/
 	@Test
 	void contextLoads() {
 	}
