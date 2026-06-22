@@ -4,4 +4,7 @@ pluginManagement {
 		gradlePluginPortal()
 	}
 }
-rootProject.name = 'analytics-service'
+
+rootProject.name = 'price-tracker'
+
+include 'common', 'analytics-service', 'parser-service'
