@@ -1,0 +1,44 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: parser-service
+  labels:
+    app: steam-monitor
+    component: parser
+    tier: backend
+spec:
+  schedule: "*/15 * * * *"
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            app: steam-monitor
+            component: parser
+            tier: backend
+        spec:
+          restartPolicy: OnFailure
+          containers:
+            - name: parser-service
+              image: parser-service:latest
+              imagePullPolicy: IfNotPresent
+              env:
+                - name: STEAM_PARSER_RUN_ONCE
+                  value: "true"
+                - name: SPRING_MAIN_WEB_APPLICATION_TYPE
+                  value: "none"
+              envFrom:
+                - configMapRef:
+                    name: parser-config
+                - secretRef:
+                    name: parser-secret
+              resources:
+                requests:
+                  cpu: "100m"
+                  memory: "256Mi"
+                limits:
+                  cpu: "500m"
+                  memory: "512Mi"
