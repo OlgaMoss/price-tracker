@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: parser-config
+  labels:
+    app: steam-monitor
+    component: parser
+    tier: backend
+data:
+  STEAM_PARSER_COUNTRY_CODE: "ru"
+  STEAM_PARSER_KAFKA_TOPIC: "raw-prices"
+  STEAM_PARSER_REQUEST_DELAY_MS: "1500"
+  STEAM_PARSER_APP_IDS: "220,570,730,1091500,1245620,1174180"
+  SPRING_KAFKA_BOOTSTRAP_SERVERS: "kafka:9092"

@@ -1,0 +1,29 @@
+server:
+  port: 8082
+
+spring:
+  application:
+    name: parser-service
+
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        spring.json.add.type.headers: true
+
+steam:
+  parser:
+    country-code: ru
+    schedule-cron: "0 */15 * * * *"
+    kafka-topic: raw-prices
+    request-delay-ms: 1500
+    run-once: false
+    app-ids:
+      - 220      # Half-Life 2
+      - 570      # Dota 2
+      - 730      # Counter-Strike 2
+      - 1091500  # Cyberpunk 2077
+      - 1245620  # Elden Ring
+      - 1174180  # Red Dead Redemption 2
