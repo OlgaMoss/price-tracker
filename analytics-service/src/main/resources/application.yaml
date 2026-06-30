@@ -6,7 +6,7 @@ spring:
     name: analytics-service
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/price_tracker_db
+    url: jdbc:postgresql://localhost:5433/price_tracker_db
     username: tracker_user
     password: tracker_password
     driver-class-name: org.postgresql.Driver
