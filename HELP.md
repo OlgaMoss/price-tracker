@@ -1,26 +1,15 @@
-# Read Me First
-The following was discovered as part of building this project:
+# Справочные материалы
 
-* The original package name 'io.github.solar.analytics' is invalid and this project uses 'io.github.solar.analytics' instead.
+Описание проекта: [README](README.md), [архитектура](docs/architecture.md),
+[режимы запуска](docs/running.md).
 
-# Getting Started
+Версии, используемые проектом, определяются [build.gradle](build.gradle)
+и [Gradle Wrapper](gradle/wrapper/gradle-wrapper.properties): Java toolchain 26,
+Spring Boot plugin 4.1.0, Gradle 9.5.1.
+Ссылки ниже ведут к общим руководствам и не подтверждают работу проекта в окружении.
 
-### Reference Documentation
-For further reference, please consider the following sections:
-
-* [Official Gradle documentation](https://docs.gradle.org)
-* [Spring Boot Gradle Plugin Reference Guide](https://docs.spring.io/spring-boot/4.1.0-SNAPSHOT/gradle-plugin)
-* [Create an OCI image](https://docs.spring.io/spring-boot/4.1.0-SNAPSHOT/gradle-plugin/packaging-oci-image.html)
-* [Spring Data JPA](https://docs.spring.io/spring-boot/4.1.0-SNAPSHOT/reference/data/sql.html#data.sql.jpa-and-spring-data)
-* [Spring for Apache Kafka](https://docs.spring.io/spring-boot/4.1.0-SNAPSHOT/reference/messaging/kafka.html)
-
-### Guides
-The following guides illustrate how to use some features concretely:
-
-* [Accessing Data with JPA](https://spring.io/guides/gs/accessing-data-jpa/)
-
-### Additional Links
-These additional references should also help you:
-
-* [Gradle Build Scans – insights for your project's build](https://scans.gradle.com#gradle)
-
+- [Gradle documentation](https://docs.gradle.org/)
+- [Spring Boot reference](https://docs.spring.io/spring-boot/reference/)
+- [Spring Boot Gradle plugin](https://docs.spring.io/spring-boot/gradle-plugin/)
+- [Spring Data JPA](https://docs.spring.io/spring-data/jpa/reference/)
+- [Spring for Apache Kafka](https://docs.spring.io/spring-kafka/reference/)

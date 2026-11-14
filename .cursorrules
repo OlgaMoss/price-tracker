@@ -3,13 +3,15 @@
 # ==============================================================================
 
 ## 🧠 ГЛОБАЛЬНЫЙ КОНТЕКСТ ПРОЕКТА
-- Это событийно-ориентированная микросервисная система для мониторинга цен Steam.
-- **Стек**: Java 26+, Spring Boot 4.x, Spring Data JPA (Hibernate), Apache Kafka, PostgreSQL, Kubernetes (K8s), Docker.
-- **Микросервисы**:
-  1. `parser-service`: K8s CronJob / Таймер -> Steam Web API -> Kafka (`raw-prices`).
-  2. `analytics-service`: Kafka (`raw-prices`) -> БД Postgres -> Логика скидок -> Kafka (`price-drops`).
-  3. `notification-service`: Kafka (`price-drops`) -> Telegram API / Email / Console.
-
+- Это событийно-ориентированная система мониторинга цен Steam Store API.
+- Стек в `build.gradle`: Java toolchain 26, Spring Boot plugin 4.1.0; Kafka, JPA/PostgreSQL.
+- Gradle-модули: `common` (общий DTO), `parser-service`, `analytics-service`.
+- Spring Boot приложения: `ParserServiceApplication` и `AnalyticsServiceApplication`.
+- Реализованный поток: Scheduler либо RunOnce → Steam Store API → parser-service → Kafka (`raw-prices`) → analytics-service → PostgreSQL.
+- Аналитика сравнивает с текущей ценой; история сохраняет первую цену и изменения, но не неизменные наблюдения.
+- Снижение цены только логируется. `PriceDropEvent`, публикация `price-drops`, `notification-service` и Telegram / Email / Console — планы.
+- Подтверждения: [архитектура](docs/architecture.md), [режимы запуска](docs/running.md).
+- Примеры в стандартах ниже иллюстрируют оформление, а не реализованные классы.
 
 ## 📝 СТАНДАРТЫ КОММЕНТАРИЕВ И ДОКУМЕНТАЦИИ (ОБЯЗАТЕЛЬНО)
 # Каждая генерация кода должна строго следовать этим правилам документирования:
@@ -71,5 +73,6 @@
 
 
 # Контекст архитектуры проекта
-- Мы пишем систему мониторинга цен Steam Web API.
-- Топики Kafka: 'raw-prices' (сырые данные), 'price-drops' (скидки).
+- Источник данных — Steam Store API (`/api/appdetails`); `cc` задаёт страну запроса.
+- Рабочий топик обмена — `raw-prices`; использование `price-drops` пока не реализовано.
+- Страна и валюта не сохраняются в текущем Kafka-контракте и БД.

@@ -2,16 +2,23 @@
 
 ## Архитектура
 
-Событийно-ориентированная микросервисная система мониторинга цен Steam.
+Текущее состояние: три Gradle-модуля — `common`, `parser-service`, `analytics-service`.
+`common` содержит общий DTO; Spring Boot приложения — только parser и analytics.
+Стек в `build.gradle`: Java toolchain 26, Spring Boot plugin 4.1.0; сервисы используют Kafka и JPA/PostgreSQL.
 
-**Стек**: Java 26+, Spring Boot 4.x, Spring Data JPA (Hibernate), Apache Kafka, PostgreSQL, Kubernetes, Docker.
+**Реализовано**:
 
-**Микросервисы**:
-- `parser-service`: K8s CronJob → Steam Web API → Kafka (`raw-prices`)
-- `analytics-service`: Kafka (`raw-prices`) → PostgreSQL → Логика скидок → Kafka (`price-drops`)
-- `notification-service`: Kafka (`price-drops`) → Telegram API / Email / Console
+- `parser-service`: Scheduler либо RunOnce → Steam Store API → Kafka (`raw-prices`).
+- `analytics-service`: Kafka (`raw-prices`) → сравнение с текущей ценой → PostgreSQL.
+- История содержит первую цену и изменения в обе стороны; неизменная цена не записывается.
+- Снижение цены логируется; публикация события пока является TODO.
 
-**Kafka топики**: `raw-prices` (сырые данные), `price-drops` (скидки).
+**Планируется**: `PriceDropEvent`, публикация в `price-drops`, `notification-service`
+и уведомления через Telegram / Email / Console. Эти компоненты не реализованы.
+
+Подтверждения по файлам и классам: [архитектура](docs/architecture.md).
+Режимы запуска и инфраструктурные ограничения: [запуск](docs/running.md).
+Примеры в стандартах ниже иллюстрируют оформление и не являются перечнем реализованных классов.
 
 ---
 
