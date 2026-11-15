@@ -37,6 +37,32 @@ jobs:
       - name: Build and test all modules
         run: ./gradlew --no-daemon clean build
 
+      - name: Test results
+        if: ${{ !cancelled() }}
+        shell: python
+        run: |
+          from collections import Counter
+          from pathlib import Path
+          import xml.etree.ElementTree as ET
+
+          counts = Counter()
+          reports = sorted(Path(".").glob("**/build/test-results/test/TEST-*.xml"))
+          for report in reports:
+              for test in ET.parse(report).iter("testcase"):
+                  if test.find("failure") is not None or test.find("error") is not None:
+                      status = "FAILED"
+                  elif test.find("skipped") is not None:
+                      status = "SKIPPED"
+                  else:
+                      status = "PASSED"
+                  counts[status] += 1
+                  print(f"{status:7} {test.get('classname')}.{test.get('name')}")
+
+          if reports:
+              print(f"\nПрошло: {counts['PASSED']} | Упало: {counts['FAILED']} | Пропущено: {counts['SKIPPED']}")
+          else:
+              print("JUnit XML ещё не созданы. Подробности — в логе сборки.")
+
       - name: Upload test reports
         if: always()
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
