@@ -1,0 +1,48 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [develop]
+    types: [opened, synchronize, reopened]
+  push:
+    branches: [develop]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Gradle build and tests
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Check out sources
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+
+      - name: Set up Temurin JDK 26
+        uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654 # v5.2.0
+        with:
+          distribution: temurin
+          java-version: '26'
+          cache: gradle
+
+      - name: Show build environment
+        run: |
+          java -version
+          ./gradlew --version
+          docker version
+
+      - name: Build and test all modules
+        run: ./gradlew --no-daemon clean build
+
+      - name: Upload test reports
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: gradle-test-reports
+          path: |
+            **/build/test-results/test/*.xml
+            **/build/reports/tests/test/**
+          retention-days: 7
+          if-no-files-found: warn
