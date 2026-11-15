@@ -8,5 +8,3 @@ pluginManagement {
 rootProject.name = 'price-tracker'
 
 include 'common', 'analytics-service', 'parser-service'
-
-throw new GradleException('CI acceptance check: intentional failure before test reports')
