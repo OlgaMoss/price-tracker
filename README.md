@@ -28,7 +28,7 @@ Parser запускается по Scheduler или однократно чер�
 ./gradlew --no-daemon clean build
 ```
 
-Gradle Wrapper собирает `common`, `parser-service` и `analytics-service` и запускает все unit- и smoke-тесты. В `analytics-service` smoke-тест запускает PostgreSQL 16 через Testcontainers. В `parser-service` smoke-тест использует встроенный Kafka-брокер, а тесты HTTP-клиента обращаются к локальному WireMock. Для этой проверки достаточно запустить Docker. Вручную поднимать Kafka или PostgreSQL и передавать production credentials не требуется.
+Gradle Wrapper собирает `common`, `parser-service` и `analytics-service` и запускает все unit- и smoke-тесты. В `analytics-service` smoke-тест запускает PostgreSQL 16 через Testcontainers. В `parser-service` smoke-тест использует встроенный Kafka-брокер, а тесты HTTP-клиента обращаются к локальному WireMock. Из инфраструктуры достаточно работающего Docker. Вручную поднимать Kafka или PostgreSQL и передавать production credentials не требуется.
 
 После сборки в каждом модуле с тестами доступны отчёты:
 
