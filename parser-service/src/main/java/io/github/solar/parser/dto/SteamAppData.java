@@ -17,7 +17,7 @@ public class SteamAppData {
 	private Integer steamAppId;
 
 	@JsonProperty("is_free")
-	private boolean free;
+	private Boolean free;
 
 	@JsonProperty("price_overview")
 	private SteamPriceOverview priceOverview;

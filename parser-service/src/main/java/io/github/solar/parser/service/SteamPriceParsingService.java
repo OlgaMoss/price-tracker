@@ -4,6 +4,7 @@ import io.github.solar.common.dto.ProductPriceMessage;
 import io.github.solar.parser.client.SteamApiClient;
 import io.github.solar.parser.config.SteamParserProperties;
 import io.github.solar.parser.dto.SteamAppData;
+import io.github.solar.parser.exception.IncompleteSteamPriceException;
 import io.github.solar.parser.kafka.RawPriceProducer;
 import io.github.solar.parser.mapper.SteamPriceMapper;
 import lombok.RequiredArgsConstructor;
@@ -45,16 +46,21 @@ public class SteamPriceParsingService {
 	}
 
 	private int parseAndPublish(int appId) {
-		return steamApiClient.fetchAppDetails(appId)
-				.flatMap(SteamPriceMapper::toProductPriceMessage)
-				.map(message -> {
-					rawPriceProducer.publish(message);
-					return 1;
-				})
-				.orElseGet(() -> {
-					log.warn("Цена не получена, пропускаем appId={}", appId);
-					return 0;
-				});
+		try {
+			return steamApiClient.fetchAppDetails(appId)
+					.flatMap(SteamPriceMapper::toProductPriceMessage)
+					.map(message -> {
+						rawPriceProducer.publish(message);
+						return 1;
+					})
+					.orElseGet(() -> {
+						log.warn("Цена не получена, пропускаем appId={}", appId);
+						return 0;
+					});
+		} catch (IncompleteSteamPriceException e) {
+			log.error("Неполные данные цены Steam: appId={}, причина={}", appId, e.getMessage(), e);
+			return 0;
+		}
 	}
 
 	private void sleepBetweenRequests() {
