@@ -15,7 +15,7 @@ public class SteamPriceOverview {
 	private int initial;
 
 	@JsonProperty("final")
-	private int finalPrice;
+	private Integer finalPrice;
 
 	@JsonProperty("discount_percent")
 	private int discountPercent;
