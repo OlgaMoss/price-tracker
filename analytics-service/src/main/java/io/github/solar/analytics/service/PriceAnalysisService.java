@@ -5,6 +5,7 @@ import io.github.solar.analytics.entity.Product;
 import io.github.solar.analytics.mapper.ProductMapper;
 import io.github.solar.analytics.repository.PriceHistoryRepository;
 import io.github.solar.analytics.repository.ProductRepository;
+import io.github.solar.analytics.validation.ProductPriceMessageValidator;
 import io.github.solar.common.dto.ProductPriceMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,6 +36,8 @@ public class PriceAnalysisService {
 	 */
 	@Transactional
 	public void analyzePrice(ProductPriceMessage message) {
+		ProductPriceMessageValidator.validate(message);
+
 		log.info("Получены данные для анализа: externalId={}, title={}, price={}",
 				message.getExternalId(), message.getTitle(), message.getPrice());
 

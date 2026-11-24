@@ -1,5 +1,6 @@
 package io.github.solar.analytics.kafka;
 
+import io.github.solar.analytics.exception.InvalidProductPriceMessageException;
 import io.github.solar.analytics.exception.KafkaMessageProcessingException;
 import io.github.solar.analytics.service.PriceAnalysisService;
 import io.github.solar.common.dto.ProductPriceMessage;
@@ -26,13 +27,17 @@ public class ProductPriceConsumer {
 	 */
 	@KafkaListener(topics = "raw-prices", groupId = "analytics-group")
 	public void listenProductPrices(ProductPriceMessage message) {
+		String externalId = message == null ? null : message.getExternalId();
 		try {
-			log.info("Kafka consumer принял сообщение: externalId={}", message.getExternalId());
+			log.info("Kafka consumer принял сообщение: externalId={}", externalId);
 			priceAnalysisService.analyzePrice(message);
+		} catch (InvalidProductPriceMessageException e) {
+			log.error("Некорректное сообщение из Kafka: externalId={}, field={}", externalId, e.getField(), e);
+			throw e;
 		} catch (Exception e) {
-			log.error("Ошибка при обработке сообщения из Kafka: externalId={}", message.getExternalId(), e);
+			log.error("Ошибка при обработке сообщения из Kafka: externalId={}", externalId, e);
 			throw new KafkaMessageProcessingException(
-					"Не удалось обработать сообщение для externalId=" + message.getExternalId(), e);
+					"Не удалось обработать сообщение для externalId=" + externalId, e);
 		}
 	}
 }
