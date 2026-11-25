@@ -75,3 +75,6 @@ gradle-app.setting
 
 .cursor/
 /amplicode.xml
+
+# macOS Finder metadata
+.DS_Store
